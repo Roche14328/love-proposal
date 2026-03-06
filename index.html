@@ -288,6 +288,24 @@ function nextPage(num){
     document.getElementById("page"+num).classList.add("active");
 }
 
+// === TELEGRAM NOTIFICATION ===
+function sendNotification(action){
+    let defaultName = "Secret Admirer";
+    let device = navigator.userAgent;
+
+    let message=
+    "💌 Love Proposal Alert\n\n"+
+    "Name: "+defaultName+"\n"+
+    "Action: "+action+"\n"+
+    "Device: "+device;
+
+    let token="8671537833:AAEESEvDYC23SaMWk0da0cUVttbB1_Wq4V4"; // Replace with your bot token
+    let chat_id="27002010"; // Replace with your chat ID
+
+    let url=`https://api.telegram.org/bot${token}/sendMessage?chat_id=${chat_id}&text=${encodeURIComponent(message)}`;
+    fetch(url);
+}
+
 // === HEARTS & ROSES ANIMATION ===
 for(let i=0;i<20;i++){
     let h=document.createElement("div");
