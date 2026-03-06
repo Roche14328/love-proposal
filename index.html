@@ -25,6 +25,8 @@ button{
   cursor:pointer;
 }
 
+button:focus{outline:none;}
+
 .yes{
   background:#ff2e63;
   color:white;
@@ -51,13 +53,6 @@ img{
 
 .active{
   display:block;
-}
-
-input{
-  padding:2vh 4vw;
-  border-radius:20px;
-  border:none;
-  font-size:4vw;
 }
 
 /* LOVE MESSAGE FONT SIZE */
@@ -152,7 +147,7 @@ button{font-size:5vw;}
   <h2>I've a message for you dear❤️</h2>
   <img src="sticker1.gif" width="200">
   <br>
-  <button onclick="start()">Continue</button>
+  <button type="button" onclick="start()">Continue</button>
 </div>
 
 <!-- PAGE 2: PROPOSAL -->
@@ -179,7 +174,7 @@ button{font-size:5vw;}
     • You see the best in me, even when I can’t see it myself<br>
     • I can’t imagine life without you and your love<br>
   </p>
-  <button onclick="nextPage(4)">Memories With Me</button>
+  <button type="button" onclick="nextPage(4)">Memories With Me</button>
 </div>
 
 <!-- PAGE 4: SHOPPING/FINAL GIFTS -->
@@ -198,7 +193,7 @@ button{font-size:5vw;}
 <script>
 let noCount = 0;
 
-// === Typing effect for proposal ===
+// Typing effect
 let text="I’ve loved you as my best friend all this time and now I want to love you forever — will you marry me? 💍";
 let i=0;
 function typeText(){
@@ -209,17 +204,15 @@ function typeText(){
     }
 }
 
-// === START PAGE: CONTINUE BUTTON ===
+// START button
 function start(){
     document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
     document.getElementById("page2").classList.add("active");
 
-    // Typing effect
     document.getElementById("proposalText").innerHTML="";
     i=0;
     typeText();
 
-    // Unmute & play background music after first click
     const music = document.getElementById("bgMusic");
     music.muted = false;
     music.play().catch(err => console.log("Music autoplay blocked", err));
@@ -227,7 +220,7 @@ function start(){
     sendNotification("opened page2");
 }
 
-// === PROPOSAL NO BUTTON ===
+// NO button
 function noProposal(){
     const beep = document.getElementById("beepSound");
     beep.currentTime = 0;
@@ -240,22 +233,19 @@ function noProposal(){
         <img src="cat_gun.gif">
         <h2>Tor shomossha ki? Yes de</h2>
         <button class="yes" onclick="yesProposal()">Yes</button>
-        <button class="no" onclick="noProposal()">No</button>
-        `;
+        <button class="no" onclick="noProposal()">No</button>`;
     }else if(noCount==2){
         page.innerHTML=`
         <img src="cat_beg.gif">
         <h2>Man ja meri ma chocholate dimuni🥺</h2>
         <button class="yes" onclick="yesProposal()">Yes</button>
-        <button class="no" onclick="noProposal()">No</button>
-        `;
+        <button class="no" onclick="noProposal()">No</button>`;
     }else if(noCount==3){
         page.innerHTML=`
         <img src="cat_shoot.gif">
         <h2>Ami kintu moira jamu 😭</h2>
         <button class="yes" onclick="yesProposal()">Yes</button>
-        <button class="no" onclick="noProposal()">No</button>
-        `;
+        <button class="no" onclick="noProposal()">No</button>`;
     }else{
         let size=6+noCount*2;
         page.innerHTML=`
@@ -263,17 +253,15 @@ function noProposal(){
         <img src="kissing.gif">
         <br>
         <button class="yes" style="font-size:${size}vw" onclick="yesProposal()">YES</button>
-        <button class="no" onclick="noProposal()">No</button>
-        `;
+        <button class="no" onclick="noProposal()">No</button>`;
         if(noCount>=15){
             page.innerHTML=`
-            <button class="yes" style="font-size:10vw;padding:5vh 4vw" onclick="yesProposal()">YES</button>
-            `;
+            <button class="yes" style="font-size:10vw;padding:5vh 4vw" onclick="yesProposal()">YES</button>`;
         }
     }
 }
 
-// === PROPOSAL YES BUTTON ===
+// YES button
 function yesProposal(){
     document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
     document.getElementById("page3").classList.add("active");
@@ -282,17 +270,16 @@ function yesProposal(){
     sendNotification("clicked YES ❤️");
 }
 
-// === PAGE NAVIGATION ===
+// PAGE NAVIGATION
 function nextPage(num){
     document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
     document.getElementById("page"+num).classList.add("active");
 }
 
-// === TELEGRAM NOTIFICATION ===
+// TELEGRAM NOTIFICATION
 function sendNotification(action){
     let defaultName = "Secret Admirer";
     let device = navigator.userAgent;
-
     let message=
     "💌 Love Proposal Alert\n\n"+
     "Name: "+defaultName+"\n"+
@@ -306,7 +293,7 @@ function sendNotification(action){
     fetch(url);
 }
 
-// === HEARTS & ROSES ANIMATION ===
+// HEARTS & ROSES
 for(let i=0;i<20;i++){
     let h=document.createElement("div");
     h.className="heart";
@@ -324,7 +311,7 @@ for(let i=0;i<12;i++){
     document.body.appendChild(r);
 }
 
-// === Hearts explosion on YES ===
+// HEART EXPLOSION
 function createExplosion(){
     for(let i=0;i<40;i++){
         let heart=document.createElement("div");
