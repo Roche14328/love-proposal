@@ -15,6 +15,7 @@ body{
   color:white;
 }
 
+/* Buttons */
 button{
   padding:1vh 4vw;
   font-size:4vw;
@@ -34,6 +35,7 @@ button{
   color:white;
 }
 
+/* Images */
 img{
   width:35vw;
   max-width:200px;
@@ -41,62 +43,7 @@ img{
   margin:1vh 0;
 }
 
-/* hearts */
-.heart{
-  position:fixed;
-  bottom:-10px;
-  font-size:2vw;
-  animation:float 3s linear infinite;
-}
-
-@keyframes float{
-  0%{transform:translateY(0)}
-  100%{transform:translateY(-110vh)}
-}
-
-/* roses */
-.rose{
-  position:fixed;
-  top:-10px;
-  font-size:2vw;
-  animation:fall 3s linear infinite;
-}
-
-@keyframes fall{
-  0%{transform:translateY(-10px)}
-  100%{transform:translateY(110vh)}
-}
-
-/* spinning photos */
-.photo-container{
-display:flex;
-flex-wrap:wrap;
-justify-content:center;
-align-items:center;
-gap:15px;
-margin-top:20px;
-}
-
-.photo{
-width:40vw;
-max-width:160px;
-border-radius:15px;
-animation:floatPhoto 4s ease-in-out infinite;
-}
-
-@keyframes floatPhoto{
-0%{transform:translateY(0)}
-50%{transform:translateY(-15px)}
-100%{transform:translateY(0)}
-}
-
-@media(min-width:768px){
-.photo{
-width:160px;
-}
-}
-
-/* secondary page styles */
+/* Secondary pages */
 .page{
   display:none;
   padding:5vw;
@@ -113,25 +60,78 @@ input{
   font-size:4vw;
 }
 
-.photo-container{
-  position:relative;
-  width:100%;
-  height:40vh;
-  margin-top:2vh;
-}
-
 /* LOVE MESSAGE FONT SIZE */
 .love-text{
   font-size:5vw;
   line-height:1.6;
 }
 
+/* Hearts & Roses */
+.heart{
+  position:fixed;
+  bottom:-10px;
+  font-size:2vw;
+  animation:float 3s linear infinite;
+}
+
+@keyframes float{
+  0%{transform:translateY(0)}
+  100%{transform:translateY(-110vh)}
+}
+
+.rose{
+  position:fixed;
+  top:-10px;
+  font-size:2vw;
+  animation:fall 3s linear infinite;
+}
+
+@keyframes fall{
+  0%{transform:translateY(-10px)}
+  100%{transform:translateY(110vh)}
+}
+
+/* Page 4 floating photos */
+.photo-container{
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
+align-items:center;
+gap:15px;
+margin-top:20px;
+}
+
+.photo{
+width:40vw;
+max-width:160px;
+border-radius:15px;
+animation:romanticFloat 5s ease-in-out infinite;
+}
+
+@keyframes romanticFloat{
+0%{transform:translateY(0)}
+50%{transform:translateY(-25px)}
+100%{transform:translateY(0)}
+}
+
+/* Explosion hearts */
+@keyframes explode{
+0%{transform:scale(0);opacity:1;}
+100%{transform:scale(3);opacity:0;}
+}
+
 /* Responsive tweaks */
 @media(min-width:768px){
-  button{font-size:1.5vw; padding:0.8vh 1.5vw;}
-  img{width:200px;}
-  .love-text{font-size:22px;}
-  .photo{width:180px;}
+button{font-size:1.5vw; padding:0.8vh 1.5vw;}
+img{width:200px;}
+.love-text{font-size:22px;}
+.photo{width:180px;}
+}
+
+@media(max-width:600px){
+h1{font-size:7vw;}
+h2{font-size:5vw;}
+button{font-size:5vw;}
 }
 </style>
 </head>
@@ -159,7 +159,7 @@ input{
 
 <!-- PAGE 2: PROPOSAL -->
 <div class="page" id="page2">
-  <h2>I’ve loved you as my best friend all this time and now I want to love you forever—will you marry me?💍</h2>
+  <h2 id="proposalText"></h2>
   <img src="sticker2.gif" width="200">
   <br>
   <button class="yes" onclick="yesProposal()">Yes</button>
@@ -201,6 +201,17 @@ input{
 let noCount = 0;
 let userName = "";
 
+// === Typing effect for proposal ===
+let text="I’ve loved you as my best friend all this time and now I want to love you forever — will you marry me? 💍";
+let i=0;
+function typeText(){
+if(i<text.length){
+document.getElementById("proposalText").innerHTML+=text.charAt(i);
+i++;
+setTimeout(typeText,40);
+}
+}
+
 // === START PAGE: NAME INPUT ===
 function start(){
     userName=document.getElementById("name").value;
@@ -208,6 +219,11 @@ function start(){
 
     document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
     document.getElementById("page2").classList.add("active");
+
+    // Typing effect
+    document.getElementById("proposalText").innerHTML="";
+    i=0;
+    typeText();
 
     // Unmute & play background music after first click
     const music = document.getElementById("bgMusic");
@@ -219,56 +235,57 @@ function start(){
 
 // === PROPOSAL NO BUTTON ===
 function noProposal(){
-    // Play beep sound on No
 const beep = document.getElementById("beepSound");
-beep.currentTime = 0;  // restart if clicked multiple times
+beep.currentTime = 0;
 beep.play().catch(err => console.log("Beep blocked", err));
-    noCount++;
-    let page=document.getElementById("page2");
+noCount++;
+let page=document.getElementById("page2");
 
-    if(noCount==1){
+if(noCount==1){
+    page.innerHTML=`
+    <img src="cat_gun.gif">
+    <h2>Tor shomossha ki?Yes de</h2>
+    <button class="yes" onclick="yesProposal()">Yes</button>
+    <button class="no" onclick="noProposal()">No</button>
+    `;
+}else if(noCount==2){
+    page.innerHTML=`
+    <img src="cat_beg.gif">
+    <h2>Man ja meri ma chocholate dimuni🥺</h2>
+    <button class="yes" onclick="yesProposal()">Yes</button>
+    <button class="no" onclick="noProposal()">No</button>
+    `;
+}else if(noCount==3){
+    page.innerHTML=`
+    <img src="cat_shoot.gif">
+    <h2>Ami kintu moira jamu 😭</h2>
+    <button class="yes" onclick="yesProposal()">Yes</button>
+    <button class="no" onclick="noProposal()">No</button>
+    `;
+}else{
+    let size=6+noCount*2;
+    page.innerHTML=`
+    <h2>Please say YES chumma dimuni 😭</h2>
+    <img src="kissing.gif">
+    <br>
+    <button class="yes" style="font-size:${size}vw" onclick="yesProposal()">YES</button>
+    <button class="no" onclick="noProposal()">No</button>
+    `;
+    if(noCount>=15){
         page.innerHTML=`
-        <img src="cat_gun.gif">
-        <h2>Tor shomossha ki?Yes de</h2>
-        <button class="yes" onclick="yesProposal()">Yes</button>
-        <button class="no" onclick="noProposal()">No</button>
+        <button class="yes" style="font-size:10vw;padding:5vh 4vw" onclick="yesProposal()">YES</button>
         `;
-    }else if(noCount==2){
-        page.innerHTML=`
-        <img src="cat_beg.gif">
-        <h2>Man ja meri ma chocholate dimuni🥺</h2>
-        <button class="yes" onclick="yesProposal()">Yes</button>
-        <button class="no" onclick="noProposal()">No</button>
-        `;
-    }else if(noCount==3){
-        page.innerHTML=`
-        <img src="cat_shoot.gif">
-        <h2>Ami kintu moira jamu 😭</h2>
-        <button class="yes" onclick="yesProposal()">Yes</button>
-        <button class="no" onclick="noProposal()">No</button>
-        `;
-    }else{
-        let size=6+noCount*2;
-        page.innerHTML=`
-        <h2>Please say YES chumma dimuni 😭</h2>
-        <img src="kissing.gif">
-        <br>
-        <button class="yes" style="font-size:${size}vw" onclick="yesProposal()">YES</button>
-        <button class="no" onclick="noProposal()">No</button>
-        `;
-        if(noCount>=15){
-            page.innerHTML=`
-            <button class="yes" style="font-size:10vw;padding:5vh 4vw" onclick="yesProposal()">YES</button>
-            `;
-        }
     }
+}
 }
 
 // === PROPOSAL YES BUTTON ===
 function yesProposal(){
-    document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
-    document.getElementById("page3").classList.add("active");
-    sendNotification("clicked YES ❤️");
+document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+document.getElementById("page3").classList.add("active");
+
+createExplosion();
+sendNotification("clicked YES ❤️");
 }
 
 // === PAGE NAVIGATION ===
@@ -280,10 +297,18 @@ function nextPage(num){
 // === TELEGRAM NOTIFICATION ===
 function sendNotification(action){
     if(userName=="") return;
-    let token="PUT_BOT_TOKEN_HERE";
-    let chat_id="PUT_CHAT_ID_HERE";
-    let message=userName+" "+action;
-    let url=`https://api.telegram.org/bot${token}/sendMessage?chat_id=${chat_id}&text=${message}`;
+
+    let token="8671537833:AAEESEvDYC23SaMWk0da0cUVttbB1_Wq4V4"; // <-- Replace with your bot token
+    let chat_id="27002010"; // <-- Replace with your chat ID
+    let device = navigator.userAgent;
+
+    let message=
+    "💌 Love Proposal Alert\n\n"+
+    "Name: "+userName+"\n"+
+    "Action: "+action+"\n"+
+    "Device: "+device;
+
+    let url=`https://api.telegram.org/bot${token}/sendMessage?chat_id=${chat_id}&text=${encodeURIComponent(message)}`;
     fetch(url);
 }
 
@@ -303,6 +328,21 @@ for(let i=0;i<12;i++){
     r.style.left=Math.random()*100+"%";
     r.style.animationDuration=(6+Math.random()*6)+"s";
     document.body.appendChild(r);
+}
+
+// === Hearts explosion on YES ===
+function createExplosion(){
+for(let i=0;i<40;i++){
+let heart=document.createElement("div");
+heart.innerHTML="💖";
+heart.style.position="fixed";
+heart.style.left=Math.random()*100+"%";
+heart.style.top=Math.random()*100+"%";
+heart.style.fontSize="30px";
+heart.style.animation="explode 2s ease forwards";
+document.body.appendChild(heart);
+setTimeout(()=>heart.remove(),2000);
+}
 }
 </script>
 </body>
